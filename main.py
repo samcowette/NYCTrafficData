@@ -1,13 +1,11 @@
-from bs4 import BeautifulSoup
-import requests
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.ensemble import RandomForestRegressor
-import seaborn as sns 
 import matplotlib.pyplot as plt
+import joblib
 
 
 # read and clean data, we load in chunks becasue the dataset is 1.7 million rows
@@ -69,13 +67,13 @@ df['weekday_num'] = df['Weekday'].map(week_map)
 boro_map = {'Manhattan': 0, 'Bronx': 1, 'Brooklyn': 2, 'Queens': 3, 'Staten Island': 4}
 df['boro_num'] = df['Boro'].map(boro_map)
 
-# Next let's add the top 50 streets (should be the best predicter)
+# Next let's add streets (should be the best predicter)
 # First we have to turn the names into numbers
 
-top_streets = df['street'].value_counts().head(50).index
+street_list = df['street'].unique()
+street_map = {name: i for i, name in enumerate(street_list)}
+df['street_num'] = df['street'].map(street_map)
 
-for i, street in enumerate(top_streets):
-    df.loc[df['street'] == street, 'street_num'] = i
 
 # Now drop the values we don't need
 ml_df = df.dropna(subset=['street_num'])
@@ -129,3 +127,6 @@ plt.show()
 importance = rfModel.feature_importances_
 for col, score in zip(X.columns, importance):
     print(f"{col}: {score: .4f}")
+
+# Save model
+joblib.dump(rfModel, 'NYC_traffic_api/model/traffic_model.pkl')
