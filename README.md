@@ -78,15 +78,6 @@ This scatter plot demonstrates how closely the Random Forest model predictions m
 
 ---
 
-## 💡 Future Improvements
-
-- Deploy a Flask or FastAPI **prediction API**
-- Integrate with real-time data from public APIs (e.g., TomTom, HERE)
-- Build an interactive frontend using **Streamlit**
-- Expand the feature set to include weather or events
-
----
-
 ## 📄 License
 
 This project is provided under the MIT License and is intended for educational and portfolio use.
